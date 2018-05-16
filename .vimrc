@@ -29,6 +29,7 @@ set ambiwidth=double                  " ○, △, □等の文字幅をASCII文�
 set modeline
 set directory-=.
 let &grepprg="grep -rnIH --exclude=.git --exclude-dir=.hg --exclude-dir=.svn --exclude=tags"
+let loaded_matchparen = 1             " カーソルが括弧上にあっても括弧をハイライトさせない
 "autocmd QuickfixCmdPost [^l]* copen
 "autocmd QuickfixCmdPost l* lopen
 
