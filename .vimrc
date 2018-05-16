@@ -1,5 +1,5 @@
 "
-" Vim 8用シンプル vimrc
+" Vim8用サンプル vimrc
 "
 if has('win32')
   set encoding=cp932
@@ -11,8 +11,8 @@ scriptencoding utf-8
 unlet! skip_defaults_vim
 source $VIMRUNTIME/defaults.vim
 
-"packadd! vimdoc-ja
-"set helplang=ja,en
+packadd! vimdoc-ja
+set helplang=ja,en
 
 set scrolloff=0
 set laststatus=2                      " 常にステータス行を表示する
@@ -29,9 +29,14 @@ set ambiwidth=double                  " ○, △, □等の文字幅をASCII文�
 set modeline
 set directory-=.
 let &grepprg="grep -rnIH --exclude=.git --exclude-dir=.hg --exclude-dir=.svn --exclude=tags"
-let loaded_matchparen = 1             " カーソルが括弧上にあっても括弧をハイライトさせない
-"autocmd QuickfixCmdPost [^l]* copen
-"autocmd QuickfixCmdPost l* lopen
+let loaded_matchparen = 1             " カーソルが括弧上にあっても括弧ペアをハイライトさせない
+
+" :grep 等でquickfixウィンドウを開く (:lgrep 等でlocationlistウィンドウを開く)
+"augroup qf_win
+"  autocmd!
+"  autocmd QuickfixCmdPost [^l]* copen
+"  autocmd QuickfixCmdPost l* lopen
+"augroup END
 
 " マウスの中央ボタンクリックによるクリップボードペースト動作を抑制する
 noremap <MiddleMouse> <Nop>
@@ -86,12 +91,14 @@ if has('autocmd')
       let &fileencoding = &encoding
     endif
   endfunction
-  autocmd BufReadPost * call AU_ReSetting_Fenc()
+  augroup resetting_fenc
+    autocmd!
+    autocmd BufReadPost * call AU_ReSetting_Fenc()
+  augroup END
 endif
 
 "-------------------------------------------------------------------------------
 colorscheme torte
-"colorscheme classic2
 
 " IME ON中のカーソル色を紫に設定
 " (使用するcolorschemeで既に設定されている場合はコメントアウトして下さい)

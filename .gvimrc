@@ -1,5 +1,5 @@
 "
-" Vim 8用シンプル gvimrc
+" Vim8用サンプル gvimrc
 "
 scriptencoding utf-8
 "set guifont=ＭＳ_ゴシック:h9:cSHIFTJIS
@@ -14,3 +14,5 @@ set printoptions=number:y,left:3pc,right:3pc,top:3pc,bottom:3pc
 "set guioptions-=L			" 画面縦分割時の左スクロールバーを非表示
 set guicursor+=a:blinkon1700-blinkoff700	" カーソルのブリンクをまったりさせる
 set linespace=0				" 行間を狭くする
+
+" vim:set et ts=2 sw=0:
