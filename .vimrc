@@ -28,6 +28,7 @@ set nofixendofline
 set ambiwidth=double                  " ○, △, □等の文字幅をASCII文字の倍にする
 set modeline
 set directory-=.
+set formatoptions+=mM
 let &grepprg="grep -rnIH --exclude=.git --exclude-dir=.hg --exclude-dir=.svn --exclude=tags"
 let loaded_matchparen = 1             " カーソルが括弧上にあっても括弧ペアをハイライトさせない
 
