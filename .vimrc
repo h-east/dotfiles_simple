@@ -1,35 +1,39 @@
 "
 " Vim8用サンプル vimrc
 "
-if has('win32')
-  set encoding=cp932
+if has('win32')                   " Windows 32bit または 64bit ?
+  set encoding=cp932              " cp932 が嫌なら utf-8 にしてください
 else
   set encoding=utf-8
 endif
-scriptencoding utf-8
+scriptencoding utf-8              " This file's encoding
 
+" 推奨設定の読み込み (:h default.vim)
 unlet! skip_defaults_vim
 source $VIMRUNTIME/defaults.vim
 
-packadd! vimdoc-ja
-set helplang=ja,en
+"===============================================================================
+" 設定の追加はこの行以降でおこなうこと
+
+packadd! vimdoc-ja                " 日本語help の読み込み
+set helplang=ja,en                " help言語の設定
 
 set scrolloff=0
-set laststatus=2                      " 常にステータス行を表示する
-set cmdheight=2
-if !has('gui_running')
+set laststatus=2                  " 常にステータス行を表示する
+set cmdheight=2                   " hit-enter回数を減らすのが目的
+if !has('gui_running')            " gvimではない？
   set mouse=
-  set ttimeoutlen=0
-  if $COLORTERM == "truecolor"
-    set termguicolors                " true colorサポート端末
+  set ttimeoutlen=0               " モード変更時の表示更新を最速化
+  if $COLORTERM == "truecolor"    " True Color対応端末？
+    set termguicolors
   endif
 endif
-set nofixendofline
-set ambiwidth=double                  " ○, △, □等の文字幅をASCII文字の倍にする
-set directory-=.
-set formatoptions+=mM
+set nofixendofline                " Windowsのエディタの人達に嫌われない設定
+set ambiwidth=double              " ○, △, □等の文字幅をASCII文字の倍にする
+set directory-=.                  " swapファイルはローカル作成がトラブル少なめ
+set formatoptions+=mM             " 日本語の途中でも折り返す
 let &grepprg="grep -rnIH --exclude=.git --exclude-dir=.hg --exclude-dir=.svn --exclude=tags"
-let loaded_matchparen = 1             " カーソルが括弧上にあっても括弧ペアをハイライトさせない
+let loaded_matchparen = 1         " カーソルが括弧上にあっても括弧ペアをハイライトさせない
 
 " :grep 等でquickfixウィンドウを開く (:lgrep 等でlocationlistウィンドウを開く)
 "augroup qf_win
@@ -98,10 +102,14 @@ if has('autocmd')
 endif
 
 "-------------------------------------------------------------------------------
+" カラースキームの設定
 colorscheme torte
 
-" IME ON中のカーソル色を紫に設定
-" (使用するcolorschemeで既に設定されている場合はコメントアウトして下さい)
-hi CursorIM ctermfg=16 ctermbg=127 guifg=#000000 guibg=#af00af
+try
+  hi CursorIM
+catch /E411/
+  " CursorImが定義されていなければ、IME ON中のカーソル色を紫に設定
+  hi CursorIM ctermfg=16 ctermbg=127 guifg=#000000 guibg=#af00af
+endtry
 
 " vim:set et ts=2 sw=0:
