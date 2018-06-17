@@ -13,7 +13,9 @@ unlet! skip_defaults_vim
 source $VIMRUNTIME/defaults.vim
 
 "===============================================================================
-" 設定の追加はこの行以降でおこなうこと
+" 設定の追加はこの行以降でおこなうこと！
+" 分からないオプション名は先頭に ' を付けてhelpしましょう。例:
+" :h 'helplang
 
 packadd! vimdoc-ja                " 日本語help の読み込み
 set helplang=ja,en                " help言語の設定
@@ -21,8 +23,8 @@ set helplang=ja,en                " help言語の設定
 set scrolloff=0
 set laststatus=2                  " 常にステータス行を表示する
 set cmdheight=2                   " hit-enter回数を減らすのが目的
-if !has('gui_running')            " gvimではない？
-  set mouse=
+if !has('gui_running')            " gvimではない？ (== 端末)
+  set mouse=                      " マウス無効 (macOS時は不便かも？)
   set ttimeoutlen=0               " モード変更時の表示更新を最速化
   if $COLORTERM == "truecolor"    " True Color対応端末？
     set termguicolors
@@ -106,9 +108,9 @@ endif
 colorscheme torte
 
 try
-  hi CursorIM
+  silent! hi CursorIM
 catch /E411/
-  " CursorImが定義されていなければ、IME ON中のカーソル色を紫に設定
+  " CursorIM (IME ON中のカーソル色)が定義されていなければ、紫に設定
   hi CursorIM ctermfg=16 ctermbg=127 guifg=#000000 guibg=#af00af
 endtry
 
