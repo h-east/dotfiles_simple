@@ -108,7 +108,7 @@ endif
 colorscheme torte
 
 try
-  silent! hi CursorIM
+  silent hi CursorIM
 catch /E411/
   " CursorIM (IME ON中のカーソル色)が定義されていなければ、紫に設定
   hi CursorIM ctermfg=16 ctermbg=127 guifg=#000000 guibg=#af00af
