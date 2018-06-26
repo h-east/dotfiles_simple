@@ -8,7 +8,7 @@ else
 endif
 scriptencoding utf-8              " This file's encoding
 
-" 推奨設定の読み込み (:h default.vim)
+" 推奨設定の読み込み (:h defaults.vim)
 unlet! skip_defaults_vim
 source $VIMRUNTIME/defaults.vim
 
