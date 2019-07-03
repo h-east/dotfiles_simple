@@ -1,23 +1,37 @@
 "
-" Vim8用サンプル vimrc
+" Sample vimrc for Vim 8
 "
-if has('win32')                   " Windows 32bit または 64bit ?
-  set encoding=cp932              " cp932 が嫌なら utf-8 にしてください
+if has('win32')                   " Windows 32bit or 64bit ?
+  set encoding=cp932              " If you don't like cp932, change to utf-8.
 else
   set encoding=utf-8
 endif
 scriptencoding utf-8              " This file's encoding
 
+" ここから日本語を使ってOK
+
 " 推奨設定の読み込み (:h defaults.vim)
 unlet! skip_defaults_vim
 source $VIMRUNTIME/defaults.vim
+
+" 古い自動コマンドを全てクリア
+augroup MyVimrc
+  autocmd!
+augroup END
 
 "===============================================================================
 " 設定の追加はこの行以降でおこなうこと！
 " 分からないオプション名は先頭に ' を付けてhelpしましょう。例:
 " :h 'helplang
 
-packadd! vimdoc-ja                " 日本語help の読み込み
+" 日本語helpの設定
+" 事前にシェルで以下のコマンドを実行してください。
+" 初回時:
+"   $ git clone --depth=1 https://github.com/vim-jp/vimdoc-ja.git ~/.vim/pack/my/opt/vimdoc-ja
+" 更新時:
+"   $ cd ~/.vim/pack/my/opt/vimdoc-ja
+"   $ git pull
+packadd! vimdoc-ja                " 日本語helpの読み込み
 set helplang=ja,en                " help言語の設定
 
 set scrolloff=0
@@ -26,7 +40,7 @@ set cmdheight=2                   " hit-enter回数を減らすのが目的
 if !has('gui_running')            " gvimではない？ (== 端末)
   set mouse=                      " マウス無効 (macOS時は不便かも？)
   set ttimeoutlen=0               " モード変更時の表示更新を最速化
-  if $COLORTERM == "truecolor"    " True Color対応端末？
+  if $COLORTERM == "truecolor" || has('win32')    " True Color対応端末？
     set termguicolors
   endif
 endif
@@ -34,12 +48,11 @@ set nofixendofline                " Windowsのエディタの人達に嫌われ�
 set ambiwidth=double              " ○, △, □等の文字幅をASCII文字の倍にする
 set directory-=.                  " swapファイルはローカル作成がトラブル少なめ
 set formatoptions+=mM             " 日本語の途中でも折り返す
-let &grepprg="grep -rnIH --exclude=.git --exclude-dir=.hg --exclude-dir=.svn --exclude=tags"
+let &grepprg="grep -rnIH --exclude-dir=.git --exclude-dir=.hg --exclude-dir=.svn --exclude=tags"
 let loaded_matchparen = 1         " カーソルが括弧上にあっても括弧ペアをハイライトさせない
 
 " :grep 等でquickfixウィンドウを開く (:lgrep 等でlocationlistウィンドウを開く)
-"augroup qf_win
-"  autocmd!
+"augroup MyVimrc
 "  autocmd QuickfixCmdPost [^l]* copen
 "  autocmd QuickfixCmdPost l* lopen
 "augroup END
@@ -60,7 +73,7 @@ let &statusline = "%<%f %m%r%h%w[%{&ff}][%{(&fenc!=''?&fenc:&enc).(&bomb?':bom':
 if has('iconv')
   let &statusline .= "0x%{FencB()}"
 
-  function! FencB()
+  function FencB()
     let c = matchstr(getline('.'), '.', col('.') - 1)
     if c != ''
       let c = iconv(c, &enc, &fenc)
@@ -69,10 +82,10 @@ if has('iconv')
       return '0'
     endif
   endfunction
-  function! s:Str2byte(str)
+  function s:Str2byte(str)
     return map(range(len(a:str)), 'char2nr(a:str[v:val])')
   endfunction
-  function! s:Byte2hex(bytes)
+  function s:Byte2hex(bytes)
     return join(map(copy(a:bytes), 'printf("%02X", v:val)'), '')
   endfunction
 else
@@ -92,13 +105,12 @@ if has('iconv')
 endif
 " 日本語を含まないファイルのエンコーディングは encoding と同じにする
 if has('autocmd')
-  function! AU_ReSetting_Fenc()
+  function AU_ReSetting_Fenc()
     if &fileencoding =~# 'iso-2022-jp' && search("[^\x01-\x7e]", 'n') == 0
       let &fileencoding = &encoding
     endif
   endfunction
-  augroup resetting_fenc
-    autocmd!
+  augroup MyVimrc
     autocmd BufReadPost * call AU_ReSetting_Fenc()
   augroup END
 endif
